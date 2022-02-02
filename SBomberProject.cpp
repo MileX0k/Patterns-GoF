@@ -10,7 +10,7 @@ using namespace std;
 
 int main(void)
 {
-    MyTools::OpenLogFile("log.txt");
+    MyTools::FileLoggerSingletone::getInstance().OpenLogFile("log.txt");
 
     SBomber game;
 
@@ -32,7 +32,7 @@ int main(void)
 
     } while (!game.GetExitFlag());
 
-    MyTools::CloseLogFile();
+    MyTools::FileLoggerSingletone::getInstance().CloseLogFile();
 
     return 0;
 }

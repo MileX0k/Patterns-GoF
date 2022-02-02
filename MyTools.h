@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <string>
+using namespace std;
 
 namespace MyTools {
 
@@ -39,16 +40,36 @@ namespace MyTools {
     void SetColor(ConsoleColor color);
 
 	//=============================================================================================
+    
+    class FileLoggerSingletone
+    {
+    public:
 
-	void __fastcall OpenLogFile(const std::string& FN);
+        static FileLoggerSingletone& getInstance()
+        {
+            static FileLoggerSingletone theInstance;
+            return theInstance;
+        }
 
-	void CloseLogFile();
+        void __fastcall OpenLogFile(const std::string& FN);
 
-	void __fastcall WriteToLog(const std::string& str);
+        void CloseLogFile();
 
-	void __fastcall WriteToLog(const std::string& str, int n);
+        void __fastcall WriteToLog(const std::string& str);
 
-	void __fastcall WriteToLog(const std::string& str, double d);
+        void __fastcall WriteToLog(const std::string& str, int n);
+
+        void __fastcall WriteToLog(const std::string& str, double d);
+
+
+    private:
+
+
+        FileLoggerSingletone() {};
+        FileLoggerSingletone(const FileLoggerSingletone& root) = delete;
+        FileLoggerSingletone& operator=(const FileLoggerSingletone&) = delete;
+    };
+
 
 	//=============================================================================================
 
