@@ -70,18 +70,7 @@ namespace MyTools {
 
     //=============================================================================================
 
-    void __fastcall OpenLogFile(const string& FN)
-    {
-        logOut.open(FN, ios_base::out);
-    }
-
-    void CloseLogFile()
-    {
-        if (logOut.is_open())
-        {
-            logOut.close();
-        }
-    }
+    //==================================TASK 1=====================================
 
     string GetCurDateTime()
     {
@@ -93,7 +82,20 @@ namespace MyTools {
         return string(buf);
     }
 
-    void __fastcall WriteToLog(const string& str)
+    void FileLoggerSingletone::OpenLogFile(const string& FN)
+    {
+        logOut.open(FN, ios_base::out);
+    }
+
+    void FileLoggerSingletone::CloseLogFile()
+    {
+        if (logOut.is_open())
+        {
+            logOut.close();
+        }
+    }
+
+    void  FileLoggerSingletone::WriteToLog(const string& str)
     {
         if (logOut.is_open())
         {
@@ -101,7 +103,7 @@ namespace MyTools {
         }
     }
 
-    void __fastcall WriteToLog(const string& str, int n)
+    void __fastcall FileLoggerSingletone::WriteToLog(const string& str, int n)
     {
         if (logOut.is_open())
         {
@@ -109,7 +111,7 @@ namespace MyTools {
         }
     }
 
-    void __fastcall WriteToLog(const string& str, double d)
+    void __fastcall FileLoggerSingletone::WriteToLog(const string& str, double d)
     {
         if (logOut.is_open())
         {
@@ -118,6 +120,5 @@ namespace MyTools {
     }
 
     //=============================================================================================
-
 
 } // namespace MyTools
