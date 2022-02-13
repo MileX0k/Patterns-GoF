@@ -7,13 +7,16 @@
 #include "Bomb.h"
 #include "Ground.h"
 #include "Tank.h"
+//#include "SLevel.h"
+
+class ICommand;
+class SLevel;
 
 class SBomber
 {
 public:
 
     SBomber();
-    ~SBomber();
     
     inline bool GetExitFlag() const { return exitFlag; }
 
@@ -24,8 +27,11 @@ public:
     void DrawFrame();
     void MoveObjects();
     void CheckObjects();
+    void ExecuteCommands();
+
 
 private:
+    void ScheduleCommand(ICommand* cmd);
 
     void CheckPlaneAndLevelGUI();
     void CheckBombsAndGround();
@@ -34,20 +40,14 @@ private:
     void __fastcall DeleteDynamicObj(DynamicObject * pBomb);
     void __fastcall DeleteStaticObj(GameObject* pObj);
 
-    Ground * FindGround() const;
-    Plane * FindPlane() const;
-    LevelGUI * FindLevelGUI() const;
-    std::vector<DestroyableGroundObject*> FindDestoyableGroundObjects() const;
-    std::vector<Bomb*> FindAllBombs() const;
-
     void DropBomb();
 
-    std::vector<DynamicObject*> vecDynamicObj;
-    std::vector<GameObject*> vecStaticObj;
-    
+    std::vector<ICommand*> pendingCommands;
+
+    SLevel* level;
+
     bool exitFlag;
 
     uint64_t startTime, finishTime, passedTime;
-    uint16_t bombsNumber, deltaTime, fps;
-    int16_t score;
+    uint16_t deltaTime, fps;
 };
