@@ -10,6 +10,11 @@ public:
 
 	void Draw() const override;
 
+	virtual void Accept(LogVisitor const& v) const {
+		v.Log(*this);
+	}
+
+
 private:
 
 };

@@ -8,6 +8,7 @@
 #include "Ground.h"
 #include "Tank.h"
 #include "House.h"
+#include "LogVisitor.h"
 
 using namespace std;
 using namespace MyTools;
@@ -95,12 +96,15 @@ SBomber::~SBomber()
 void SBomber::MoveObjects()
 {
     WriteToLog(string(__FUNCTION__) + " was invoked");
+    
+    LogVisitor visitor;
 
-    for (size_t i = 0; i < vecDynamicObj.size(); i++)
+    for (auto* i : vecDynamicObj)
     {
-        if (vecDynamicObj[i] != nullptr)
+        if (i != nullptr)
         {
-            vecDynamicObj[i]->Move(deltaTime);
+            i->Move(deltaTime);
+            i->Accept(visitor);
         }
     }
 };

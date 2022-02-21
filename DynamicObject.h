@@ -3,8 +3,9 @@
 #include <stdint.h>
 
 #include "GameObject.h"
+#include "LogVisitor.h"
 
-class DynamicObject : public GameObject 
+class DynamicObject : public GameObject
 {
 public:
 
@@ -15,7 +16,9 @@ public:
     
     virtual void Move(uint16_t time) { x += xDirction * speed * time * 0.001; y += yDirection * speed * time * 0.001; };
 
-protected:
+    virtual void Accept(LogVisitor const&) const = 0;
+
+protected: 
 
     double speed;
     double xDirction, yDirection;
