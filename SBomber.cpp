@@ -128,7 +128,7 @@ void SBomber::CheckBombsAndGround()
     auto itBombs = FindAllBombs();
     Ground* pGround = FindGround();
     const double y = pGround->GetY();
-    while (itBombs.get() != nullptr)
+    if (itBombs.get() != nullptr)
     {
         if (itBombs.get()->GetY() >= y) // Пересечение бомбы с землей
         {
@@ -229,8 +229,8 @@ Ground* SBomber::FindGround() const
 
 BombIterator SBomber::FindAllBombs()
 {
-    BombIterator itBombs{ vecDynamicObj.begin() };
-    return itBombs;
+        BombIterator itBombs{ vecDynamicObj.begin(), vecDynamicObj.end()};
+        return itBombs;
 }
 
 //================================================================================
