@@ -8,6 +8,45 @@
 #include "Ground.h"
 #include "Tank.h"
 
+//================================================================================
+
+template <typename T>
+class Iterator {
+public:
+    virtual ~Iterator() = default;
+
+    virtual void next() = 0;
+    virtual T get() const = 0;
+};
+
+class BombIterator : public Iterator<Bomb*> {
+public:
+
+   BombIterator(std::vector<DynamicObject*>::iterator const& obj_it, std::vector<DynamicObject*>::iterator end)
+        : vec_bombs{ obj_it },
+            end{ end }   {
+        if (get() == nullptr)
+            next();
+    }
+
+    void next() override {
+        while (vec_bombs != end && dynamic_cast<Bomb*>(*vec_bombs) == nullptr) {
+            vec_bombs++;
+        }
+    }
+
+    Bomb* get() const override {
+        if (vec_bombs == end) return nullptr;
+        else return dynamic_cast<Bomb*>(*vec_bombs);
+    }
+
+private:
+    std::vector<DynamicObject*>::iterator vec_bombs;
+    std::vector<DynamicObject*>::iterator end;
+};
+
+//=====================================================================
+
 class SBomber
 {
 public:
@@ -38,7 +77,7 @@ private:
     Plane * FindPlane() const;
     LevelGUI * FindLevelGUI() const;
     std::vector<DestroyableGroundObject*> FindDestoyableGroundObjects() const;
-    std::vector<Bomb*> FindAllBombs() const;
+    BombIterator FindAllBombs();
 
     void DropBomb();
 

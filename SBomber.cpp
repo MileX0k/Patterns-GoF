@@ -22,7 +22,7 @@ SBomber::SBomber()
     bombsNumber(10),
     score(0)
 {
-    WriteToLog(string(__FUNCTION__) + " was invoked");
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     Plane* p = new Plane;
     p->SetDirection(1, 0.1);
@@ -94,7 +94,7 @@ SBomber::~SBomber()
 
 void SBomber::MoveObjects()
 {
-    WriteToLog(string(__FUNCTION__) + " was invoked");
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
@@ -107,7 +107,7 @@ void SBomber::MoveObjects()
 
 void SBomber::CheckObjects()
 {
-    WriteToLog(string(__FUNCTION__) + " was invoked");
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     CheckPlaneAndLevelGUI();
     CheckBombsAndGround();
@@ -121,22 +121,25 @@ void SBomber::CheckPlaneAndLevelGUI()
     }
 }
 
+//================================================================================
+
 void SBomber::CheckBombsAndGround() 
 {
-    vector<Bomb*> vecBombs = FindAllBombs();
+    auto itBombs = FindAllBombs();
     Ground* pGround = FindGround();
     const double y = pGround->GetY();
-    for (size_t i = 0; i < vecBombs.size(); i++)
+    if (itBombs.get() != nullptr)
     {
-        if (vecBombs[i]->GetY() >= y) // Пересечение бомбы с землей
+        if (itBombs.get()->GetY() >= y) // Пересечение бомбы с землей
         {
-            pGround->AddCrater(vecBombs[i]->GetX());
-            CheckDestoyableObjects(vecBombs[i]);
-            DeleteDynamicObj(vecBombs[i]);
+            pGround->AddCrater(itBombs.get()->GetX());
+            CheckDestoyableObjects(itBombs.get());
+            DeleteDynamicObj(itBombs.get());
         }
     }
-
 }
+
+//================================================================================
 
 void SBomber::CheckDestoyableObjects(Bomb * pBomb)
 {
@@ -222,21 +225,15 @@ Ground* SBomber::FindGround() const
     return nullptr;
 }
 
-vector<Bomb*> SBomber::FindAllBombs() const
+//================================================================================
+
+BombIterator SBomber::FindAllBombs()
 {
-    vector<Bomb*> vecBombs;
-
-    for (size_t i = 0; i < vecDynamicObj.size(); i++)
-    {
-        Bomb* pBomb = dynamic_cast<Bomb*>(vecDynamicObj[i]);
-        if (pBomb != nullptr)
-        {
-            vecBombs.push_back(pBomb);
-        }
-    }
-
-    return vecBombs;
+        BombIterator itBombs{ vecDynamicObj.begin(), vecDynamicObj.end()};
+        return itBombs;
 }
+
+//================================================================================
 
 Plane* SBomber::FindPlane() const
 {
@@ -248,7 +245,6 @@ Plane* SBomber::FindPlane() const
             return p;
         }
     }
-
     return nullptr;
 }
 
@@ -275,8 +271,8 @@ void SBomber::ProcessKBHit()
         c = _getch();
     }
 
-    WriteToLog(string(__FUNCTION__) + " was invoked. key = ", c);
-
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked. key = ", c);
+    
     switch (c) {
 
     case 27: // esc
@@ -306,7 +302,7 @@ void SBomber::ProcessKBHit()
 
 void SBomber::DrawFrame()
 {
-    WriteToLog(string(__FUNCTION__) + " was invoked");
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
     for (size_t i = 0; i < vecDynamicObj.size(); i++)
     {
@@ -332,7 +328,7 @@ void SBomber::DrawFrame()
 
 void SBomber::TimeStart()
 {
-    WriteToLog(string(__FUNCTION__) + " was invoked");
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
     startTime = GetTickCount64();
 }
 
@@ -342,14 +338,14 @@ void SBomber::TimeFinish()
     deltaTime = uint16_t(finishTime - startTime);
     passedTime += deltaTime;
 
-    WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
+    FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " deltaTime = ", (int)deltaTime);
 }
 
 void SBomber::DropBomb()
 {
     if (bombsNumber > 0)
     {
-        WriteToLog(string(__FUNCTION__) + " was invoked");
+        FileLoggerSingletone::getInstance().WriteToLog(string(__FUNCTION__) + " was invoked");
 
         Plane* pPlane = FindPlane();
         double x = pPlane->GetX() + 4;
