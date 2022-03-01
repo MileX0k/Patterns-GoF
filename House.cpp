@@ -7,6 +7,10 @@
 using namespace std;
 using namespace MyTools;
 
+House::House(const std::array<char, width_h * height_h>& look) {
+	std::copy_n(look.begin(), look.size(), static_cast<char*>(*this->look));
+}
+
 bool House::isInside(double x1, double x2) const
 {
 	const double XBeg = x + 2;
@@ -30,19 +34,20 @@ bool House::isInside(double x1, double x2) const
 	return false;
 }
 
+
 void House::Draw() const
 {
 	MyTools::SetColor(CC_Yellow);
-	GotoXY(x, y - 5);
-	cout << "  ########  ";
-	GotoXY(x, y - 4);
-	cout << "##        ##";
-	GotoXY(x, y - 3);
-	cout << "############";
-	GotoXY(x, y - 2);
-	cout << "#          #";
-	GotoXY(x, y - 1);
-	cout << "#          #";
-	GotoXY(x, y);
-	cout << "############";
+	int value = 6;
+	GotoXY(x, y - value);
+	for (int i = 0; i < height_h; i++) {
+		for (int j = 0; j < width_h; j++)
+		{
+			cout << look[i][j];
+		}
+		value--;
+		GotoXY(x, y - value);
+
+	}
 }
+
