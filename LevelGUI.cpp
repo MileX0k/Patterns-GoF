@@ -40,6 +40,11 @@ void LevelGUI::Draw() const
     cout << "BombsNum: " << bombsNumber;
     GotoXY(62, 1);
     cout << "Score: " << score;
+
+    for (auto& msg : messages) {
+        GotoXY(msg.x, msg.y);
+        std::cout << msg.text;
+    }
 }
 
 void __fastcall LevelGUI::SetParam(uint64_t passedTimeNew, uint64_t fpsNew, uint16_t bombsNumberNew, int16_t scoreNew)
@@ -48,4 +53,13 @@ void __fastcall LevelGUI::SetParam(uint64_t passedTimeNew, uint64_t fpsNew, uint
     fps = fpsNew;
     bombsNumber = bombsNumberNew;
     score = scoreNew;
+}
+
+void LevelGUI::DisplayMessage(uint16_t x, uint16_t y, float duration, std::string_view text) {
+    messages.emplace_back(Message{ duration, std::string{text} , x, y });
+    auto res = std::remove_if(messages.begin(), messages.end(), [duration](auto& msg) {
+        msg.lifeLeft -= duration;
+        return msg.lifeLeft < 0;
+        });
+    messages.erase(res, messages.end());
 }

@@ -32,6 +32,13 @@ bool Tank::isInside(double x1, double x2) const
 
 void Tank::Draw() const
 {
+	std::vector<std::string> text = { "Ha-ha-ha", "You'll miss", "You lose", "Retard!" };
+	auto n = rand() % 300;
+	auto m = rand() % 4;
+	if (n == 0) {
+		MessageBoxed->AddMessage(text[m], x, y - 5);
+	}
+
 	MyTools::SetColor(CC_Brown);
 	GotoXY(x, y - 3);
 	cout << "    #####";
