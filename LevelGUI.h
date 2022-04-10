@@ -3,6 +3,8 @@
 #include <stdint.h>
 
 #include "GameObject.h"
+#include<vector>
+#include<string_view>
 
 class LevelGUI : public GameObject {
 public:
@@ -18,6 +20,8 @@ public:
 
     void Draw() const override;
 
+    void DisplayMessage(uint16_t x, uint16_t y, float duration, std::string_view message);
+
 private:
 
     uint16_t height;
@@ -26,6 +30,15 @@ private:
     uint64_t passedTime, fps;
     uint16_t bombsNumber;
     int16_t score;
+
+    struct Message
+    {
+        float lifeLeft;
+        std::string text;
+        uint16_t x, y;
+    };
+
+    std::vector<Message> messages;
 };
 
 
